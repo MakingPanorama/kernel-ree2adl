@@ -786,7 +786,7 @@
 //#endif /*OPLUS_FEATURE_STORAGE*/
 
 #include "mediatek/oplus6769_charger_atom_10w.dtsi"
-#include <oplus6769_22365_T0/cust.dtsi>
+//#include <oplus6769_22365_T0/cust.dtsi>
 #include "mediatek/cust_mt6769_camera_atom_22365_T0.dtsi"
 #include "mediatek/cust_mt6769_touch_1080x2400.dtsi"
 #include "mediatek/cust_mt6769_touch_720x1612_22361.dtsi"

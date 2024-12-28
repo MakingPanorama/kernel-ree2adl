@@ -57,7 +57,8 @@ modules.builtin
 /vmlinuz
 /System.map
 /Module.markers
-
+/out
+/prebuilts
 #
 # RPM spec file (make rpm-pkg)
 #

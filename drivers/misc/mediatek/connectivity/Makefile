@@ -49,17 +49,25 @@ endif
     ifeq ($(CONFIG_MTK_COMBO), y)
         ccflags-y += -D CFG_CONNADP_BUILD_IN
     endif
+
     # Do build-in for Makefile checking
-    # export CONFIG_WLAN_DRV_BUILD_IN=y
+    export CONFIG_WLAN_DRV_BUILD_IN=y
+    export FOLD=/home/icrying/Documents/postmarketos_kernel_rmx3710
 
     ifeq ($(CONFIG_WLAN_DRV_BUILD_IN),y)
+        $(info $$CONFIG_MTK_COMBO_CHIP is [${CONFIG_MTK_COMBO_CHIP}])
+        MTK_PLATFORM_ID := $(patsubst CONSYS_%,%,$(subst ",,$(CONFIG_MTK_COMBO_CHIP)))
+        $(info MTK_PLATFORM_ID is [${MTK_PLATFORM_ID}])
+        
         PATH_TO_WMT_DRV      = vendor/mediatek/kernel_modules/connectivity/common
         PATH_TO_WLAN_CHR_DRV = vendor/mediatek/kernel_modules/connectivity/wlan/adaptor
         PATH_TO_WLAN_DRV     = vendor/mediatek/kernel_modules/connectivity/wlan/core/gen4m
+        PATH_TO_GPS          = vendor/mediatek/kernel_modules/connectivity/gps
 
-        ABS_PATH_TO_WMT_DRV      = $(srctree)/../$(PATH_TO_WMT_DRV)
-        ABS_PATH_TO_WLAN_CHR_DRV = $(srctree)/../$(PATH_TO_WLAN_CHR_DRV)
-        ABS_PATH_TO_WLAN_DRV     = $(srctree)/../$(PATH_TO_WLAN_DRV)
+        ABS_PATH_TO_WMT_DRV      = $(FOLD)/$(PATH_TO_WMT_DRV)
+        ABS_PATH_TO_WLAN_CHR_DRV = $(FOLD)/$(PATH_TO_WLAN_CHR_DRV)
+        ABS_PATH_TO_WLAN_DRV     = $(FOLD)/$(PATH_TO_WLAN_DRV)
+        ABS_PATH_TO_GPS          = $(FOLD)/$(PATH_TO_GPS)
 
         # check wlan driver folder
         ifeq (,$(wildcard $(ABS_PATH_TO_WMT_DRV)))
@@ -71,24 +79,49 @@ endif
         ifeq (,$(wildcard $(ABS_PATH_TO_WLAN_DRV)))
             $(error $(ABS_PATH_TO_WLAN_DRV) is not existed)
         endif
+        ifeq (,$(wildcard $(ABS_PATH_TO_GPS)))
+            $(error $(ABS_PATH_TO_GPS) is not existed)
+        endif
 
         $(warning symbolic link to $(PATH_TO_WMT_DRV))
         $(warning symbolic link to $(PATH_TO_WLAN_CHR_DRV))
         $(warning symbolic link to $(PATH_TO_WLAN_DRV))
+        $(warning symbolic link to $(PATH_TO_GPS))
 
         $(shell unlink $(srctree)/$(src)/wmt_drv)
         $(shell unlink $(srctree)/$(src)/wmt_chrdev_wifi)
         $(shell unlink $(srctree)/$(src)/wlan_drv_gen4m)
+        $(shell unlink $(srctree)/$(src)/gps)
 
         $(shell ln -s $(ABS_PATH_TO_WMT_DRV)      $(srctree)/$(src)/wmt_drv)
         $(shell ln -s $(ABS_PATH_TO_WLAN_CHR_DRV) $(srctree)/$(src)/wmt_chrdev_wifi)
         $(shell ln -s $(ABS_PATH_TO_WLAN_DRV)     $(srctree)/$(src)/wlan_drv_gen4m)
+        $(shell ln -s $(ABS_PATH_TO_GPS)          $(srctree)/$(src)/gps)
 
         # for gen4m options
         export CONFIG_MTK_COMBO_WIFI_HIF=axi
         export MTK_COMBO_CHIP=CONNAC
-        export WLAN_CHIP_ID=6765
+        export WLAN_CHIP_ID=$(MTK_PLATFORM_ID)
+        export MTK_ANDROID_EMI=y
+        export SUPPORT_QA_TOOL=y
         export MTK_ANDROID_WMT=y
+        export MTK_WLAN_SERVICE=y
+        export CONFIG_MTK_WIFI_NAN=n
+        export ADAPTOR_OPTS=$(MTK_COMBO_CHIP)
+
+        WLAN_IP_SET_1_SERIES := 6765 6761 6885 6893
+        WLAN_IP_SET_2_SERIES := 3967 6785
+        WLAN_IP_SET_3_SERIES := 6779 6873 6853
+        ifneq ($(filter $(WLAN_IP_SET_3_SERIES), $(WLAN_CHIP_ID)),)
+            $(info WIFI_IP_SET is 3)
+            export WIFI_IP_SET=3
+        else ifneq ($(filter $(WLAN_IP_SET_2_SERIES), $(WLAN_CHIP_ID)),)
+            $(info WIFI_IP_SET is 2)
+            export WIFI_IP_SET=2
+        else
+            $(info WIFI_IP_SET is 1)
+            export WIFI_IP_SET=1
+        endif
 
         # Do build-in for xxx.c checking
         subdir-ccflags-y += -D MTK_WCN_REMOVE_KERNEL_MODULE
@@ -96,6 +129,8 @@ endif
         obj-y += wmt_drv/
         obj-y += wmt_chrdev_wifi/
         obj-y += wlan_drv_gen4m/
+        obj-y += gps/
+        obj-y += bt/
     endif
 
 # Otherwise we were called directly from the command line;
