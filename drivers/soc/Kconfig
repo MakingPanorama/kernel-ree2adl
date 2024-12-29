@@ -21,7 +21,7 @@ source "drivers/soc/zte/Kconfig"
 
 #ifdef OPLUS_FEATURE_LOWMEM_DBG
 source "drivers/soc/oplus/lowmem_dbg/Kconfig"
-##endif /* OPLUS_FEATURE_LOWMEM_DBG */
+#endif /* OPLUS_FEATURE_LOWMEM_DBG */
 
 #ifdef OPLUS_FEATURE_IOMONITOR
 source "drivers/soc/oplus/iomonitor/Kconfig"

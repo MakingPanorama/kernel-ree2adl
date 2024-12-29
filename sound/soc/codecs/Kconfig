@@ -1460,10 +1460,10 @@ config SND_SOC_SMARTPAINFO
 	  if device with smartpa on it, enable it.
 	  If unsure, say N.
 
-source "sound/soc/codecs/cs35l43/Kconfig"
+#source "sound/soc/codecs/cs35l43/Kconfig"
 
 endmenu
 
-#ifdef OPLUS_ARCH_EXTENDS
-source "sound/soc/codecs/audio/Kconfig"
-#endif /* OPLUS_ARCH_EXTENDS */
+##ifdef OPLUS_ARCH_EXTENDS
+#source "Kconfig"
+##endif /* OPLUS_ARCH_EXTENDS */
