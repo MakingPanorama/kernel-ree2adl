@@ -3,7 +3,7 @@ export CROSS_COMPILE=aarch64-linux-gnu-
 export LLVM=1
 export LLVM_IAS=1
 # DEFCONFIG=defconfig
-export CLANG_PREBUILT_BIN=prebuilts/clang/host/linux-x86/clang-r383902/bin
+export CLANG_PREBUILT_BIN=$HOME/Documents/rmx3710/kernel_ree2adl/prebuilts/clang/host/linux-x86/clang-r383902/bin
 # for check scripts
 export CC=clang
 export LD=ld.lld
@@ -14,4 +14,4 @@ export OBJDUMP=llvm-objdump
 export READELF=llvm-readelf
 export OBJSIZE=llvm-size
 export STRIP=llvm-strip
-#export PATH=$CLANG_PREBUILT_BIN:$PATH
+export PATH=$CLANG_PREBUILT_BIN:$PATH
