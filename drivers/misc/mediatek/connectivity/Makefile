@@ -52,7 +52,6 @@ endif
 
     # Do build-in for Makefile checking
     export CONFIG_WLAN_DRV_BUILD_IN=y
-    export FOLD=/home/icrying/Documents/postmarketos_kernel_rmx3710
 
     ifeq ($(CONFIG_WLAN_DRV_BUILD_IN),y)
         $(info $$CONFIG_MTK_COMBO_CHIP is [${CONFIG_MTK_COMBO_CHIP}])
@@ -63,40 +62,6 @@ endif
         PATH_TO_WLAN_CHR_DRV = vendor/mediatek/kernel_modules/connectivity/wlan/adaptor
         PATH_TO_WLAN_DRV     = vendor/mediatek/kernel_modules/connectivity/wlan/core/gen4m
         PATH_TO_GPS          = vendor/mediatek/kernel_modules/connectivity/gps
-
-        ABS_PATH_TO_WMT_DRV      = $(FOLD)/$(PATH_TO_WMT_DRV)
-        ABS_PATH_TO_WLAN_CHR_DRV = $(FOLD)/$(PATH_TO_WLAN_CHR_DRV)
-        ABS_PATH_TO_WLAN_DRV     = $(FOLD)/$(PATH_TO_WLAN_DRV)
-        ABS_PATH_TO_GPS          = $(FOLD)/$(PATH_TO_GPS)
-
-        # check wlan driver folder
-        ifeq (,$(wildcard $(ABS_PATH_TO_WMT_DRV)))
-            $(error $(ABS_PATH_TO_WMT_DRV) is not existed)
-        endif
-        ifeq (,$(wildcard $(ABS_PATH_TO_WLAN_CHR_DRV)))
-            $(error $(ABS_PATH_TO_WLAN_CHR_DRV) is not existed)
-        endif
-        ifeq (,$(wildcard $(ABS_PATH_TO_WLAN_DRV)))
-            $(error $(ABS_PATH_TO_WLAN_DRV) is not existed)
-        endif
-        ifeq (,$(wildcard $(ABS_PATH_TO_GPS)))
-            $(error $(ABS_PATH_TO_GPS) is not existed)
-        endif
-
-        $(warning symbolic link to $(PATH_TO_WMT_DRV))
-        $(warning symbolic link to $(PATH_TO_WLAN_CHR_DRV))
-        $(warning symbolic link to $(PATH_TO_WLAN_DRV))
-        $(warning symbolic link to $(PATH_TO_GPS))
-
-        $(shell unlink $(srctree)/$(src)/wmt_drv)
-        $(shell unlink $(srctree)/$(src)/wmt_chrdev_wifi)
-        $(shell unlink $(srctree)/$(src)/wlan_drv_gen4m)
-        $(shell unlink $(srctree)/$(src)/gps)
-
-        $(shell ln -s $(ABS_PATH_TO_WMT_DRV)      $(srctree)/$(src)/wmt_drv)
-        $(shell ln -s $(ABS_PATH_TO_WLAN_CHR_DRV) $(srctree)/$(src)/wmt_chrdev_wifi)
-        $(shell ln -s $(ABS_PATH_TO_WLAN_DRV)     $(srctree)/$(src)/wlan_drv_gen4m)
-        $(shell ln -s $(ABS_PATH_TO_GPS)          $(srctree)/$(src)/gps)
 
         # for gen4m options
         export CONFIG_MTK_COMBO_WIFI_HIF=axi
